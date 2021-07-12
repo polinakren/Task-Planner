@@ -1,0 +1,54 @@
+.edit-form{
+  width: 22.2%;
+  position: absolute;
+  right: 0;
+  margin-top: 1em;
+  margin-right: 1em;
+  border-radius: 6px;
+  background-color: #8683aa;
+  padding: 13px ;
+}
+
+button{
+  background: #2c3e50;
+  color: #ffffff;
+  border: 1px solid #2c3e50;
+}
+
+.date{
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.date-item{
+  margin-left: 4em;
+}
+
+.form-control{
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 0.5em;
+}
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+button{
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.description{
+  height: 160px;
+}
+
+input, textarea{
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+}

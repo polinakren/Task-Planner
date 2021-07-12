@@ -1,0 +1,32 @@
+.navigation{
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-item{
+  display: flex;
+}
+
+p{
+  padding: 7px 13px;
+  border-radius: 6px;
+  background: #2c3e50;
+  color: #ffffff;
+  border: 1px solid #2c3e50;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #000;
+  color: #2c3e50;
+}
+
+.settings{
+  margin-left: 1em;
+}
+
+.user{
+  margin-right: 1em;
+}
+

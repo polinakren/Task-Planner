@@ -1,0 +1,97 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "teamId": 1,
+      "login": "anzi1117",
+      "title": "Anton Ziuzin",
+      "eventColor": "orange"
+    },
+    {
+      "id": 2,
+      "teamId": 1,
+      "login": "polina8952",
+      "title": "Polina Kren",
+      "eventColor": "orange"
+    },
+    {
+      "id": 3,
+      "teamId": 1,
+      "login": "nikola63",
+      "title": "Nikolai Lobachevsky",
+      "eventColor": "orange"
+    },
+    {
+      "id": 4,
+      "teamId": 1,
+      "login": "john86",
+      "title": "John Nash",
+      "eventColor": "orange"
+    },
+    {
+      "id": 5,
+      "teamId": 2,
+      "login": "john42",
+      "title": "Alan Turing",
+      "eventColor": "orange"
+    },
+    {
+      "id": 6,
+      "teamId": 2,
+      "login": "john54",
+      "title": "John von Neumann",
+      "eventColor": "orange"
+    },
+    {
+      "id": 7,
+      "teamId": 2,
+      "login": "ivan20",
+      "title": "Ivan Ivanov",
+      "eventColor": "orange"
+    }
+  ],
+  "teams": [
+    {
+      "id": 1,
+      "teamId": 1,
+      "title": "Developers"
+    },
+    {
+      "id": 2,
+      "teamId": 2,
+      "title": "Developers"
+    }
+  ],
+  "tasks": [
+    {
+      "assigneeType": "user",
+      "assigneeId": 2,
+      "start": "2021-07-12",
+      "end": "2021-07-13",
+      "title": "eveev",
+      "description": "",
+      "status": "",
+      "id": 1
+    },
+    {
+      "assigneeType": "user",
+      "assigneeId": 3,
+      "start": "2021-07-14",
+      "end": "2021-07-15",
+      "title": "",
+      "description": "",
+      "status": "",
+      "id": 2
+    },
+    {
+      "assigneeType": "user",
+      "assigneeId": 4,
+      "start": "2021-07-11",
+      "end": "2021-07-12",
+      "title": "",
+      "description": "",
+      "status": "",
+      "id": 3
+    }
+  ]
+}
