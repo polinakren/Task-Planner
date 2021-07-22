@@ -13,6 +13,9 @@ button{
   background: #2c3e50;
   color: #ffffff;
   border: 1px solid #2c3e50;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
 }
 
 .date{
@@ -34,14 +37,6 @@ button{
 .buttons{
   display: flex;
   justify-content: space-between;
-}
-
-
-
-button{
-  border-radius: 4px;
-  padding: 10px;
-  cursor: pointer;
 }
 
 .description{

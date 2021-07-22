@@ -13,7 +13,6 @@ export class TeamsService {
 
   getTeams(): Observable<Team[]> {
     return this.http.get('http://localhost:3000/teams').pipe(map((data: any) => {
-      //console.log(data);
       return data.map(function (team: any): Team {
         return new Team(team.id, team.teamId, team.title);
       });

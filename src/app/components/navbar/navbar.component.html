@@ -1,11 +1,12 @@
 <div class="navigation">
   <div class="navigation-item">
-    <p>Tasks</p>
-    <p class="settings">Settings</p>
+    <button (click)="calendarPage()">Tasks</button>
+    <button class="settings">Settings</button>
+    <button class="reports" (click)="reportPage()">Reports</button>
   </div>
   <div class="navigation-item">
-    <p class="user">User</p>
-    <p>Sign out</p>
+    <button class="user">{{user}}</button>
+    <button (click)="signOut()">Sign out</button>
   </div>
 </div>
 <hr>

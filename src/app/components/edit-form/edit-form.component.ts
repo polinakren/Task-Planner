@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {interval} from "rxjs"
-import {timeInterval} from "rxjs/operators";
 
 @Component({
   selector: 'app-edit-form',
@@ -10,7 +9,7 @@ import {timeInterval} from "rxjs/operators";
 })
 export class EditFormComponent implements OnInit {
   formStatus: string = ""
-  exampleForm: FormGroup = new FormGroup ({ firstName: new FormControl(), lastName: new FormControl()});
+  editForm: FormGroup = new FormGroup ({ firstName: new FormControl(), lastName: new FormControl()});
   interval = interval(3000)
 
   constructor(private formBuilder: FormBuilder) {
@@ -34,50 +33,51 @@ export class EditFormComponent implements OnInit {
   @Output() change = new EventEmitter();
 
   ngOnInit(): void {
-    this.exampleForm = this.formBuilder.group({
+    this.editForm = this.formBuilder.group({
       title: this.title,
       description: this.description
     });
 
     this.info.description = this.description
     this.info.title = this.title
+    this.info.status = this.status
 
     this.getStatus()
 
     this.interval.subscribe((value => {
-      this.info.title = this.exampleForm.get('title')?.value
-      this.info.description = this.exampleForm.get('description')?.value
+      this.info.title = this.editForm.get('title')?.value
+      this.info.description = this.editForm.get('description')?.value
       this.change.next(this.info)
     }))
   }
 
   getStatus(){
-    if(this.status == ""){
-      this.formStatus = "In progress"
+    if(this.status == "Not set"){
+      this.formStatus = "in progress"
     }
-    if(this.status == "work"){
+    if(this.status == "In progress"){
       this.formStatus = "done"
     }
-    if(this.status == "done"){
+    if(this.status == "Done"){
       this.formStatus = "not set"
-    }
-    if(this.status == "not set"){
-      this.formStatus = ""
     }
   }
 
   restartStatus() {
-    if(this.formStatus == "In progress"){
-      this.formStatus = "done"
-      this.info.status = "work"
+    if(this.status == "Not set"){
+      this.status = "In progress"
+      this.info.status = "In progress"
+      this.getStatus()
       this.change.next(this.info)
-    } else if(this.formStatus == "done"){
-      this.formStatus = "not set"
-      this.info.status = "done"
+    } else if(this.status == "In progress"){
+      this.status = "Done"
+      this.info.status = "Done"
+      this.getStatus()
       this.change.next(this.info)
-    } else if(this.formStatus == "not set"){
-      this.formStatus = "In progress"
-      this.info.status = ""
+    } else if(this.status == "Done"){
+      this.status = "Not set"
+      this.info.status = "Not set"
+      this.getStatus()
       this.change.next(this.info)
     }
   }

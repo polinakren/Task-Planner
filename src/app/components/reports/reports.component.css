@@ -1,0 +1,76 @@
+button{
+  background: #2c3e50;
+  color: #ffffff;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+button:hover{
+  background: #8683aa;
+  border: 1px solid #8683aa;
+}
+
+header, body{
+  margin: 0;
+}
+
+body{
+  margin-top: 1.5em;
+}
+
+.navigation, .options{
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-item{
+  height: 40px;
+  display: flex;
+}
+
+.settings{
+  margin-left: 1em;
+}
+
+input{
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+  margin-left: 0.5em;
+}
+
+.options{
+  background-color: white;
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+  padding: 10px;
+  height: 250px;
+}
+
+.options p{
+  font-weight: bold;
+}
+
+.options-item{
+  width: 17%;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.options-part{
+  width: 100%;
+}
+
+.tableInfo{
+  margin-top: 1.5em;
+}
+
+input[type = checkbox]{
+  cursor: pointer;
+}
+
+
+
+

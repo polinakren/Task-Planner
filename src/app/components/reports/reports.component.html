@@ -1,0 +1,90 @@
+<header class="navigation">
+  <div class="navigation-item">
+    <button>Show tasks</button>
+    <button class="settings">In backlog</button>
+    <button class="settings">Overdue</button>
+    <button (click)="showCurrentWeek()" class="settings">Current week</button>
+    <button class="settings">Previous week</button>
+    <button class="settings">Last two weeks</button>
+    <button class="settings">Current month</button>
+  </div>
+  <div class="navigation-item">
+    <p>Tasks from </p>
+    <input type="text" placeholder="yyyy-MM-dd">
+    <p>To </p>
+    <input type="text" placeholder="yyyy-MM-dd">
+    <button class="settings">Show</button>
+  </div>
+</header>
+
+<body>
+  <div class="options">
+    <div class="options-item">
+      <p>Filter by Teams</p>
+      <span class="options-part"><input type="checkbox">Team1</span>
+      <span class="options-part"><input type="checkbox">Team2</span>
+    </div>
+
+    <div class="options-item">
+      <p>Filter by Assignees</p>
+      <div *ngFor="let user of users" class="options-part">
+        <input type="checkbox" >{{user.title}}
+      </div>
+    </div>
+    <div class="options-item">
+      <p>Filter by Statuses</p>
+      <span class="options-part"><input type="checkbox">Not set</span>
+      <span class="options-part"><input type="checkbox">In progress</span>
+    </div>
+    <div class="options-item">
+      <p>Filter by Title/Description</p>
+      <span class="options-part">Contains text</span>
+      <span class="options-part"><input type="text"></span>
+    </div>
+    <div class="options-item">
+      <p>Filter by Dates</p>
+      <span class="options-part">Start date</span>
+      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd"></span>
+      <span class="options-part">End date</span>
+      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd"></span>
+    </div>
+    <div class="options-item">
+      <p>Filter by Duration</p>
+      <span class="options-part">From days</span>
+      <span class="options-part"><input type="number"></span>
+      <span class="options-part">To days</span>
+      <span class="options-part"><input type="number"></span>
+    </div>
+  </div>
+
+  <table datatable   class="row-border hover tableInfo">
+    <thead>
+      <tr>
+        <th >Team</th>
+        <th>Assignee</th>
+        <th>Status</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of usersInfo">
+        <td>{{user.team}}</td>
+        <td>{{user.assignee}}</td>
+        <td>{{user.status}}</td>
+        <td>{{user.title}}</td>
+        <td>{{user.description}}</td>
+        <td>{{user.dateStr}}</td>
+        <td>{{user.dateEnd}}</td>
+        <td>{{user.duration}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</body>
+
+

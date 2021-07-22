@@ -54,44 +54,154 @@
     {
       "id": 1,
       "teamId": 1,
-      "title": "Developers"
+      "title": "Users"
     },
     {
       "id": 2,
       "teamId": 2,
-      "title": "Developers"
+      "title": "Developments"
     }
   ],
   "tasks": [
     {
-      "assigneeType": "user",
+      "assigneeType": "Users",
       "assigneeId": 2,
-      "start": "2021-07-12",
-      "end": "2021-07-13",
-      "title": "eveev",
-      "description": "",
-      "status": "",
+      "start": "2021-07-16",
+      "end": "2021-07-17",
+      "title": "English",
+      "description": "Do some tasks",
+      "status": "Not set",
       "id": 1
     },
     {
-      "assigneeType": "user",
-      "assigneeId": 3,
-      "start": "2021-07-14",
-      "end": "2021-07-15",
-      "title": "",
+      "assigneeType": "Users",
+      "assigneeId": 4,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "HW-15",
       "description": "",
-      "status": "",
-      "id": 2
+      "status": "Not set",
+      "id": 3
     },
     {
-      "assigneeType": "user",
-      "assigneeId": 4,
-      "start": "2021-07-11",
-      "end": "2021-07-12",
+      "assigneeType": "Users",
+      "assigneeId": 3,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
       "title": "",
       "description": "",
-      "status": "",
-      "id": 3
+      "status": "Not set",
+      "id": 9
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "Work",
+      "description": "Do some work.",
+      "status": "Done",
+      "id": 10
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "Site",
+      "description": "Talk with HR",
+      "status": "In progress",
+      "id": 11
+    },
+    {
+      "assigneeType": "Developments",
+      "assigneeId": 7,
+      "start": "2021-07-21",
+      "end": "2021-07-22",
+      "title": "",
+      "description": "",
+      "status": "Not set",
+      "id": 12
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-16",
+      "end": "2021-07-17",
+      "title": "Data-tables",
+      "description": "Explore something",
+      "status": "Not set",
+      "id": 13
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "SQL",
+      "description": "Solve the problems with SQL",
+      "status": "In progress",
+      "id": 14
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-15",
+      "end": "2021-07-16",
+      "title": "",
+      "description": "",
+      "status": "Not set",
+      "id": 15
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-15",
+      "end": "2021-07-16",
+      "title": "",
+      "description": "",
+      "status": "Not set",
+      "id": 16
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "",
+      "description": "",
+      "status": "Done",
+      "id": 17
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 2,
+      "start": "2021-07-15",
+      "end": "2021-07-16",
+      "title": "",
+      "description": "",
+      "status": "Not set",
+      "id": 18
+    },
+    {
+      "assigneeType": "Users",
+      "assigneeId": 4,
+      "start": "2021-07-17",
+      "end": "2021-07-18",
+      "title": "",
+      "description": "",
+      "status": "In progress",
+      "id": 20
+    },
+    {
+      "assigneeType": "Developments",
+      "assigneeId": 6,
+      "start": "2021-07-15",
+      "end": "2021-07-16",
+      "title": "Maths",
+      "description": "Do my work!",
+      "status": "In progress",
+      "id": 21
     }
   ]
 }

@@ -7,14 +7,6 @@
   display: flex;
 }
 
-p{
-  padding: 7px 13px;
-  border-radius: 6px;
-  background: #2c3e50;
-  color: #ffffff;
-  border: 1px solid #2c3e50;
-}
-
 hr {
   border: 0;
   height: 1px;
@@ -22,11 +14,25 @@ hr {
   color: #2c3e50;
 }
 
-.settings{
+button{
+  background: #2c3e50;
+  color: #ffffff;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+button:hover{
+  background: #8683aa;
+  border: 1px solid #8683aa;
+}
+
+.settings, .reports{
   margin-left: 1em;
 }
 
 .user{
   margin-right: 1em;
+  cursor: auto;
 }
-

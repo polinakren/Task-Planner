@@ -7,19 +7,17 @@ import {
   ViewChild,
   ViewContainerRef
 } from "@angular/core";
-import {MatTooltip, MatTooltipModule} from '@angular/material/tooltip';
 import {
   CalendarOptions,
   EventClickArg,
   EventApi,
   EventDropArg,
-  EventMountArg,
   DateSelectArg,
   CalendarApi,
-  FullCalendarComponent
+  FullCalendarComponent,
 } from "@fullcalendar/angular";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, {EventReceiveArg, EventResizeDoneArg} from "@fullcalendar/interaction";
+import interactionPlugin, {EventResizeDoneArg} from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import {TasksService} from "../../services/tasks/tasks.service";
@@ -28,7 +26,8 @@ import {TeamsService} from "../../services/teams/teams.service";
 import {User} from "../../models/users";
 import {Task} from "../../models/tasks";
 import {EditFormComponent} from "../edit-form/edit-form.component";
-
+import {interval, Subscription} from "rxjs"
+import {Team} from "../../models/teams";
 
 @Component({
   selector: 'app-calendar',
@@ -44,41 +43,42 @@ export class CalendarComponent implements OnInit {
   calendarOptions: CalendarOptions | undefined;
   tasks: Task[] = [];
   users: User[] = [];
+  teams: Team[] = [];
   calendarApi: CalendarApi | undefined;
-  tool: MatTooltip | undefined
-  isFormOpen : boolean = false
+  interval = interval(2000)
+  sub: Subscription | undefined
+  userId: number | undefined
 
   constructor(
     private tasksService: TasksService,
     private usersService: UsersService,
     private teamsService: TeamsService,
-    private componentFactoryResolver: ComponentFactoryResolver,
+    private componentFactoryResolver: ComponentFactoryResolver
   ){ }
 
   ngOnInit(): void {
+    this.getUserId(String(localStorage.getItem('userName')))
     this.calendarOptions = {
-      initialView: 'resourceTimelineWeek',
-      weekends: true,
-      editable: true,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      select: this.handleDateSelect.bind(this),
-      eventsSet: this.handleEvents.bind(this),
-      eventClick: this.handleEventClick.bind(this),
-      eventDrop: this.eventDrop.bind(this),
-      eventResize: this.eventResize.bind(this),
-      //eventDidMount: this.mountEvent.bind(this),
-
-      timeZone: 'UTC',
-      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin],
       aspectRatio: 3,
       businessHours: true,
+      dayMaxEvents: true,
+      editable: true,
+      eventClick: this.handleEventClick.bind(this),
+      eventDrop: this.eventDrop.bind(this),
+      eventsSet: this.handleEvents.bind(this),
+      eventResize: this.eventResize.bind(this),
       headerToolbar: {
         left: 'resourceTimelineWeek,resourceTimelineTwoWeeks,resourceTimelineFourWeeks,resourceTimelineEightWeeks prev,next',
         center: 'title',
         right : 'today',
       },
+      initialView: 'resourceTimelineWeek',
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin],
+      timeZone: 'UTC',
+      selectable: true,
+      selectMirror: true,
+      select: this.handleDateSelect.bind(this),
+      weekends: true,
 
       views: {
         resourceTimelineWeek: {
@@ -125,9 +125,17 @@ export class CalendarComponent implements OnInit {
         },
       },
       resourceAreaHeaderContent: 'Team',
-      //resources: 'http://localhost:3000/users',
+      resourceGroupField: 'team'
     }
 
+    this.getUsers()
+    this.getTasks()
+    this.getTeams()
+  }
+
+  currentEvents: EventApi[] = [];
+
+  getUsers(){
     this.usersService.getUsers().subscribe(users=>{
       this.users = users;
       this.calendarApi = this.getCalendarApi()
@@ -139,17 +147,19 @@ export class CalendarComponent implements OnInit {
           title: this.users[i].title,
           eventColor: this.users[i].eventColor,
           durationEditable: true,
-          startEditable: true
+          startEditable: true,
+          team: this.getGroupName(this.users[i].teamId)
         })
       }
-
     });
 
+  }
+
+  getTasks() {
     this.tasksService.getTasks().subscribe(tasks => {
       this.tasks = tasks;
       this.calendarApi = this.getCalendarApi()
       for(let i = 0; i < this.tasks.length; i++){
-
         this.calendarApi?.addEvent({
           type: this.tasks[i].assigneeType,
           resourceId: String(this.tasks[i].assigneeId),
@@ -164,61 +174,84 @@ export class CalendarComponent implements OnInit {
         })
       }
     });
-
   }
 
-  currentEvents: EventApi[] = [];
+  getTeams(){
+    this.teamsService.getTeams().subscribe(teams=>{
+      this.teams = teams
+    })
+  }
+
+  // @ts-ignore
+  getGroupName(idTeam: number): string{
+    if(idTeam == 2){
+      return 'Developers'
+    }
+    if(idTeam == 1){
+      return 'Users'
+    }
+  }
 
   getCalendarApi() {
     return this.calendarComponent?.getApi()
   }
 
-  mountEvent(info : EventMountArg){
-    // var tooltip = new Tooltip(info.el, {
-    //   title: info.event.extendedProps.description,
-    //   placement: 'top',
-    //   trigger: 'hover',
-    //   container: 'body'
-    // });
-    //this.tool?.position
+  getUserId(title: string){
+    this.usersService.getUsers().subscribe(users=>{
+      for(let i = 0; i < users.length; i++){
+        if(title == users[i].login){
+          this.userId = users[i].id
+        }
+      }
+    })
   }
 
   eventDrop(info: EventDropArg){
-    this.tasksService.editTask(new Task('user', Number(info.event._def.resourceIds),
-      info.event.startStr, info.event.endStr, info.event.title,
-      info.event._def.extendedProps.description, info.event._def.extendedProps.status, Number(info.event.id)), Number(info.event.id)).subscribe()
+    if(this.userId != info.event._def.resourceIds){
+      info.revert()
+    }else {
+      this.tasksService.editTask(new Task(this.getTypeOfUser(Number(info.event._def.resourceIds)), Number(info.event._def.resourceIds),
+        info.event.startStr, info.event.endStr, info.event.title,
+        info.event._def.extendedProps.description, info.event._def.extendedProps.status,
+        Number(info.event.id)), Number(info.event.id)).subscribe()
+    }
+
   }
 
   eventResize(info: EventResizeDoneArg){
-    this.tasksService.editTask(new Task('user', Number(info.event._def.resourceIds),
-      info.event.startStr, info.event.endStr, info.event.title,
-      info.event._def.extendedProps.description, info.event._def.extendedProps.status, Number(info.event.id)), Number(info.event.id)).subscribe()
-    if(this.isFormOpen){
-
+    if(this.userId != info.event._def.resourceIds){
+      info.revert()
+    } else {
+      this.tasksService.editTask(new Task(this.getTypeOfUser(Number(info.event._def.resourceIds)), Number(info.event._def.resourceIds),
+        info.event.startStr, info.event.endStr, info.event.title,
+        info.event._def.extendedProps.description, info.event._def.extendedProps.status, Number(info.event.id)), Number(info.event.id)).subscribe()
+      }
     }
-  }
 
   handleDateSelect(selectInfo: DateSelectArg) {
     this.calendarApi = selectInfo.view.calendar;
-    console.log(this.calendarApi.getResources())
     this.calendarApi.unselect();
+    if(this.userId == selectInfo.resource?.id){
+      this.tasksService.addTask(this.getTypeOfUser(Number(selectInfo.resource?.id)), Number(selectInfo.resource?.id), selectInfo.startStr, selectInfo.endStr, '', '', 'Not set').subscribe(task=>{
+        this.calendarApi?.addEvent({
+          type: task.assigneeType,
+          resourceId: String(task.assigneeId),
+          start: task.start,
+          end: task.end,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          id: String(task.id),
+          backgroundColor: '#ababba',
+          borderColor: '#ababba'
+        })
+      })
+    }
+  }
 
-    console.log(this.calendarApi?.getResources())
-
-    this.tasksService.addTask("user", Number(selectInfo.resource?.id), selectInfo.startStr, selectInfo.endStr, '', '', '').subscribe(task=>{
-     this.calendarApi?.addEvent({
-        type: task.assigneeType,
-        resourceId: String(task.assigneeId),
-        start: task.start,
-        end: task.end,
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        id: String(task.id),
-        backgroundColor: '#ababba',
-        borderColor: '#ababba'
-     })
-    })
+  getTypeOfUser(id: number): string{
+    let teamId = this.users[id-1].teamId
+    return this.teams[teamId-1].title
   }
 
   handleEvents(events: EventApi[]) {
@@ -228,16 +261,15 @@ export class CalendarComponent implements OnInit {
   handleEventClick(clickInfo: EventClickArg) {
     const id = clickInfo.event.id
     let eventApi = this.calendarApi?.getEventById(String(id))
-    const resourceId = Number(clickInfo.event._def.resourceIds) - 1
-    const name = this.users[resourceId].title
+    const resourceId = Number(clickInfo.event._def.resourceIds)
+    const name = this.users[resourceId-1].title
     const start = clickInfo.event.startStr
     const end = clickInfo.event.endStr
     const title = clickInfo.event.title
     const description = clickInfo.event._def.extendedProps.description
     const status = clickInfo.event._def.extendedProps.status
 
-    console.log(clickInfo.event)
-    this.createComponent(name, resourceId+1, start, end, title, description, status, Number(id))
+    this.createComponent(name, resourceId, start, end, title, description, status, Number(id))
   }
 
   delete(id: number){
@@ -248,15 +280,9 @@ export class CalendarComponent implements OnInit {
     this.tasksService.deleteTasks(id).subscribe();
   }
 
-  getUsers(){
-    this.usersService.getUsers().subscribe(users=>{
-      this.users = users;
-      return this.users;
-    });
-  }
-
   createComponent(userName: string, userId: number, start: string, end: string, title: string, description: string, status: string, id: number) {
-    this.isFormOpen = true
+    if(this.sub)
+    this.sub.unsubscribe()
     if(!this.container){
       return;
     }
@@ -264,19 +290,25 @@ export class CalendarComponent implements OnInit {
     const componentFactory: ComponentFactory<any> = this.componentFactoryResolver.resolveComponentFactory(EditFormComponent)
     this.componentRef = this.container?.createComponent(componentFactory)
 
-    this.tasksService.getTask(id).subscribe(task=>{
-      console.log(task.start, task.end)
-    })
-
     if(!this.componentRef){
       return;
     }
     this.componentRef.instance.name = userName
-    this.componentRef.instance.start = start
-    this.componentRef.instance.end = end
     this.componentRef.instance.title = title
     this.componentRef.instance.description = description
     this.componentRef.instance.status = status
+    this.componentRef.instance.start = start
+    this.componentRef.instance.end = end
+
+    this.sub = this.interval.subscribe(value => {
+      this.tasksService.getTask(id).subscribe(task=>{
+        if(!this.componentRef){
+          return;
+        }
+        this.componentRef.instance.start = task.start
+        this.componentRef.instance.end = task.end
+      })
+    })
 
     this.componentRef.instance.delete.subscribe((event: any) => {
       this.delete(id)
@@ -287,27 +319,31 @@ export class CalendarComponent implements OnInit {
     });
 
     this.componentRef.instance.change.subscribe((info: any) => {
-      const eventApi = this.calendarApi?.getEventById(String(id))
+      if(!this.componentRef){
+        return;
+      }
 
+      const eventApi = this.calendarApi?.getEventById(String(id))
       eventApi?.setProp('title', info.title)
       eventApi?.setExtendedProp('description', String(info.description))
       eventApi?.setExtendedProp('status', String(info.status))
       eventApi?.setProp('backgroundColor', this.getColor(info.status))
       eventApi?.setProp('borderColor', this.getColor(info.status))
-      this.tasksService.editTask(new Task('user', userId, start, end, info.title, info.description, info.status, id), id).subscribe()
+      this.tasksService.editTask(new Task(this.getTypeOfUser(userId), userId, this.componentRef.instance.start, this.componentRef.instance.end, info.title, info.description, info.status, id), id).subscribe()
     });
   }
 
-  // @ts-ignore
+
   getColor(status: string): string{
-    if(status == ""){
+    if(status == "Not set"){
       return "#ababba"
     }
-    if(status == "work"){
+    if(status == "In progress"){
       return "#ffbb8e"
     }
-    if(status == "done"){
+    if(status == "Done"){
       return "#7baa98"
     }
+    return "#ababba"
   }
 }
