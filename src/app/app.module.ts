@@ -20,6 +20,7 @@ import { PageReportsComponent } from './components/page-reports/page-reports.com
 
 import {CommonModule} from "@angular/common";
 import {DataTablesModule} from "angular-datatables";
+import { TableComponent } from './components/table/table.component';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -38,6 +39,7 @@ FullCalendarModule.registerPlugins([
     PageCalendarComponent,
     ReportsComponent,
     PageReportsComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

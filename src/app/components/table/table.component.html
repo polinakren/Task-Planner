@@ -1,0 +1,26 @@
+<table datatable [dtOptions]="dtOptions" class="row-border hover tableInfo">
+  <thead>
+  <tr>
+    <th>Team</th>
+    <th>Assignee</th>
+    <th>Status</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Duration</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of usersInfo">
+    <td>{{user.team}}</td>
+    <td>{{user.assignee}}</td>
+    <td>{{user.status}}</td>
+    <td>{{user.title}}</td>
+    <td>{{user.description}}</td>
+    <td>{{user.dateStr}}</td>
+    <td>{{user.dateEnd}}</td>
+    <td>{{user.duration}}</td>
+  </tr>
+  </tbody>
+</table>

@@ -1,90 +1,63 @@
 <header class="navigation">
   <div class="navigation-item">
-    <button>Show tasks</button>
-    <button class="settings">In backlog</button>
-    <button class="settings">Overdue</button>
-    <button (click)="showCurrentWeek()" class="settings">Current week</button>
-    <button class="settings">Previous week</button>
-    <button class="settings">Last two weeks</button>
-    <button class="settings">Current month</button>
+    <span>Show tasks</span>
+    <button (click)="showTasksInBacklog()" class="settings">In backlog</button>
+    <button (click)="showTasksOverdue()" class="settings">Overdue</button>
+    <button (click)="showTasks('currentWeek')" class="settings">Current week</button>
+    <button (click)="showTasks('previousWeek')" class="settings">Previous week</button>
+    <button (click)="showTasks('lastTwoWeeks')" class="settings">Last two weeks</button>
+    <button (click)="showTasksCurrentMonth()" class="settings">Current month</button>
   </div>
   <div class="navigation-item">
     <p>Tasks from </p>
-    <input type="text" placeholder="yyyy-MM-dd">
+    <input type="text"  onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="fromDate">
     <p>To </p>
-    <input type="text" placeholder="yyyy-MM-dd">
-    <button class="settings">Show</button>
+    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="toDate">
+    <button (click)="showInputDate()" class="settings">Show</button>
   </div>
 </header>
 
 <body>
   <div class="options">
     <div class="options-item">
-      <p>Filter by Teams</p>
-      <span class="options-part"><input type="checkbox">Team1</span>
-      <span class="options-part"><input type="checkbox">Team2</span>
+      <p class="options-part"><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged('isAllTeams')">Filter by Teams</p>
+      <div *ngFor = "let team of teamsFiltered" class="options-part">
+        <span class="options-part"><input type="checkbox" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+      </div>
     </div>
 
     <div class="options-item">
-      <p>Filter by Assignees</p>
-      <div *ngFor="let user of users" class="options-part">
-        <input type="checkbox" >{{user.title}}
+      <p class="options-part"><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged('isAllUsers')">Filter by Assignees</p>
+      <div *ngFor="let user of usersFiltered" class="options-part">
+        <span class="options-part"><input type="checkbox" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
       </div>
     </div>
     <div class="options-item">
-      <p>Filter by Statuses</p>
-      <span class="options-part"><input type="checkbox">Not set</span>
-      <span class="options-part"><input type="checkbox">In progress</span>
+      <p class="options-part"><input type="checkbox" [(ngModel)]="isAllStatuses" (change)="flagChanged('isAllStatuses')">Filter by Statuses</p>
+      <div *ngFor = "let status of statusFiltered" class="options-part">
+        <span class="options-part"><input type="checkbox" (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+      </div>
     </div>
     <div class="options-item">
       <p>Filter by Title/Description</p>
       <span class="options-part">Contains text</span>
-      <span class="options-part"><input type="text"></span>
+      <span class="options-part"><input type="text"  [(ngModel)]="titleDesc" (keyup)="catchTitleDescInput()"></span>
     </div>
     <div class="options-item">
       <p>Filter by Dates</p>
       <span class="options-part">Start date</span>
-      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd"></span>
+      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="startDate" (change)="flagChanged('')"></span>
       <span class="options-part">End date</span>
-      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd"></span>
+      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="endDate" (change)="flagChanged('')"></span>
     </div>
     <div class="options-item">
       <p>Filter by Duration</p>
       <span class="options-part">From days</span>
-      <span class="options-part"><input type="number"></span>
+      <span class="options-part"><input type="number" [(ngModel)]="startDuration" (change)="flagChanged('')"></span>
       <span class="options-part">To days</span>
-      <span class="options-part"><input type="number"></span>
+      <span class="options-part"><input type="number" [(ngModel)]="endDuration" (change)="flagChanged('')"></span>
     </div>
   </div>
 
-  <table datatable   class="row-border hover tableInfo">
-    <thead>
-      <tr>
-        <th >Team</th>
-        <th>Assignee</th>
-        <th>Status</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Start date</th>
-        <th>End date</th>
-        <th>Duration</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of usersInfo">
-        <td>{{user.team}}</td>
-        <td>{{user.assignee}}</td>
-        <td>{{user.status}}</td>
-        <td>{{user.title}}</td>
-        <td>{{user.description}}</td>
-        <td>{{user.dateStr}}</td>
-        <td>{{user.dateEnd}}</td>
-        <td>{{user.duration}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-
+  <template #tableContainer></template>
 </body>
-
-

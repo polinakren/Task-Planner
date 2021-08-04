@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {UsersService} from "../../services/users/users.service";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UsersService } from "../../services/users/users.service";
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  selector: "app-navbar",
+  templateUrl: "./navbar.component.html",
+  styleUrls: ["./navbar.component.css"]
 })
 export class NavbarComponent implements OnInit {
-  user: string = '';
+  user: string = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -16,25 +16,25 @@ export class NavbarComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.usersService.getUsers().subscribe(users=>{
-      for(let i = 0; i < users.length; i++){
-        if(users[i].login == localStorage.getItem('userName')){
-          this.user = users[i].title
+    this.usersService.getUsers().subscribe(users => {
+      for (const user of users) {
+        if (user.login === localStorage.getItem("userName")) {
+          this.user = user.title;
         }
       }
-    })
+    });
   }
 
-  signOut() {
-    localStorage.removeItem('userName')
-    this.router.navigate(['/'])
+  signOut(): void {
+    localStorage.removeItem("userName");
+    this.router.navigate(["/"]);
   }
 
-  calendarPage() {
-    this.router.navigate(['/calendar'])
+  calendarPage(): void {
+    this.router.navigate(["/calendar"]);
   }
 
-  reportPage() {
-    this.router.navigate(['/reports'])
+  reportPage(): void {
+    this.router.navigate(["/reports"]);
   }
 }
