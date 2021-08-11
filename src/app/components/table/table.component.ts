@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { UsersInfo } from "../../models/usersInfo";
+import { TasksInfo } from "../../models/tasksInfo";
 
 @Component({
   selector: "app-table",
@@ -9,7 +9,7 @@ import { UsersInfo } from "../../models/usersInfo";
 export class TableComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
-  @Input() usersInfo: UsersInfo[] = [];
+  @Input() usersInfo: TasksInfo[] = [];
 
   ngOnInit(): void {
   }

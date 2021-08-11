@@ -1,6 +1,6 @@
 <header class="navigation">
   <div class="navigation-item">
-    <span>Show tasks</span>
+    <p>Show tasks</p>
     <button (click)="showTasksInBacklog()" class="settings">In backlog</button>
     <button (click)="showTasksOverdue()" class="settings">Overdue</button>
     <button (click)="showTasks('currentWeek')" class="settings">Current week</button>
@@ -9,9 +9,9 @@
     <button (click)="showTasksCurrentMonth()" class="settings">Current month</button>
   </div>
   <div class="navigation-item">
-    <p>Tasks from </p>
-    <input type="text"  onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="fromDate">
-    <p>To </p>
+    <p class="navigation-date">Tasks from </p>
+    <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="fromDate">
+    <p class="navigation-date">To </p>
     <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="toDate">
     <button (click)="showInputDate()" class="settings">Show</button>
   </div>
@@ -20,42 +20,72 @@
 <body>
   <div class="options">
     <div class="options-item">
-      <p class="options-part"><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged('isAllTeams')">Filter by Teams</p>
-      <div *ngFor = "let team of teamsFiltered" class="options-part">
-        <span class="options-part"><input type="checkbox" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+      <p><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged('isAllTeams')">Filter by Teams</p>
+      <div class="scroll">
+        <div *ngFor = "let team of teamsFiltered" class="scroll-item">
+          <div *ngIf="isAllTeams; else notAllTeams">
+            <span ><input type="checkbox" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+          </div>
+
+          <ng-template #notAllTeams>
+            <span><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+          </ng-template>
+        </div>
       </div>
     </div>
 
     <div class="options-item">
-      <p class="options-part"><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged('isAllUsers')">Filter by Assignees</p>
-      <div *ngFor="let user of usersFiltered" class="options-part">
-        <span class="options-part"><input type="checkbox" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
+      <p><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged('isAllUsers')">Filter by Assignees</p>
+      <div class="scroll">
+        <div *ngFor="let user of usersFiltered" class="scroll-item">
+          <div *ngIf="isAllUsers; else notAllUsers">
+            <span><input type="checkbox" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
+          </div>
+
+          <ng-template #notAllUsers>
+            <span><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
+          </ng-template>
+        </div>
       </div>
     </div>
+
     <div class="options-item">
       <p class="options-part"><input type="checkbox" [(ngModel)]="isAllStatuses" (change)="flagChanged('isAllStatuses')">Filter by Statuses</p>
-      <div *ngFor = "let status of statusFiltered" class="options-part">
-        <span class="options-part"><input type="checkbox" (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+      <div class="scroll">
+        <div *ngFor = "let status of statusFiltered" class="scroll-item">
+          <div *ngIf="isAllStatuses; else notAllStatuses">
+              <span><input type="checkbox" (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+          </div>
+
+          <ng-template #notAllStatuses>
+              <span><input type="checkbox" [(ngModel)]= "isAllStatuses"  (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+          </ng-template>
+        </div>
       </div>
+
     </div>
     <div class="options-item">
       <p>Filter by Title/Description</p>
-      <span class="options-part">Contains text</span>
-      <span class="options-part"><input type="text"  [(ngModel)]="titleDesc" (keyup)="catchTitleDescInput()"></span>
+      <span>Contains text</span>
+      <span><input type="text" [(ngModel)]="titleDesc" (keyup)="catchTitleDescInput()"></span>
     </div>
     <div class="options-item">
       <p>Filter by Dates</p>
-      <span class="options-part">Start date</span>
-      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="startDate" (change)="flagChanged('')"></span>
-      <span class="options-part">End date</span>
-      <span class="options-part"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="endDate" (change)="flagChanged('')"></span>
+      <div class="options-input">
+        <span class="options-input-item">Start date</span>
+        <span class="options-input-item"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="startDate" (change)="flagChanged('')"></span>
+        <span class="options-input-item">End date</span>
+        <span class="options-input-item"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="endDate" (change)="flagChanged('')"></span>
+      </div>
     </div>
     <div class="options-item">
       <p>Filter by Duration</p>
-      <span class="options-part">From days</span>
-      <span class="options-part"><input type="number" [(ngModel)]="startDuration" (change)="flagChanged('')"></span>
-      <span class="options-part">To days</span>
-      <span class="options-part"><input type="number" [(ngModel)]="endDuration" (change)="flagChanged('')"></span>
+      <div class="options-input">
+        <span class="options-input-item">From days</span>
+        <span class="options-input-item"><input type="number" [(ngModel)]="startDuration" (change)="flagChanged('')"></span>
+        <span class="options-input-item">To days</span>
+        <span class="options-input-item"><input type="number" [(ngModel)]="endDuration" (change)="flagChanged('')"></span>
+      </div>
     </div>
   </div>
 

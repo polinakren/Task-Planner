@@ -12,7 +12,7 @@ import {Subject} from "rxjs";
 import {Task} from "../../models/tasks";
 import {Team} from "../../models/teams";
 import {User} from "../../models/users";
-import {UsersInfo} from "../../models/usersInfo";
+import {TasksInfo} from "../../models/tasksInfo";
 import {TasksService} from "../../services/tasks/tasks.service";
 import {TeamsService} from "../../services/teams/teams.service";
 import {UsersService} from "../../services/users/users.service";
@@ -24,14 +24,17 @@ import {TableComponent} from "../table/table.component";
   styleUrls: ["./reports.component.css"]
 })
 export class ReportsComponent implements OnInit {
+
   tasks: Task[] = [];
   users: User[] = [];
-  usersFiltered: string[] = [];
   teams: Team[] = [];
+
+  usersFiltered: string[] = [];
   teamsFiltered: string[] = [];
-  tasksInfo: UsersInfo[] = [];
-  tasksFiltered: UsersInfo[] = [];
   statusFiltered: string[] = [];
+  tasksFiltered: TasksInfo[] = [];
+
+  tasksInfo: TasksInfo[] = [];
 
   fromDate: string = "";
   toDate: string = "";
@@ -41,6 +44,14 @@ export class ReportsComponent implements OnInit {
   startDuration: number = 0;
   endDuration: number = 10;
 
+  isAllTeams: boolean = true;
+  isAllUsers: boolean = true;
+  isAllStatuses: boolean = true;
+
+  teamsFlags = new Map();
+  usersFlags = new Map();
+  statusesFlags = new Map();
+
   componentRef!: ComponentRef<any> | undefined;
   @ViewChild("tableContainer", {read: ViewContainerRef}) container: {
     clear: () => void;
@@ -49,14 +60,6 @@ export class ReportsComponent implements OnInit {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement: DataTableDirective | undefined;
   dtTrigger: Subject<any> = new Subject<any>();
-
-  isAllTeams: boolean = true;
-  isAllUsers: boolean = true;
-  isAllStatuses: boolean = true;
-
-  teamsFlags = new Map();
-  usersFlags = new Map();
-  statusesFlags = new Map();
 
   constructor(
     private tasksService: TasksService,
@@ -87,13 +90,17 @@ export class ReportsComponent implements OnInit {
         this.tasksFiltered = this.tasksInfo;
       });
     });
-    this.teamsService.getTeams().subscribe(teams => {
-      this.teams = teams;
-    });
+    this.getTeams()
   }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  getTeams(): void {
+    this.teamsService.getTeams().subscribe(teams => {
+      this.teams = teams;
+    });
   }
 
   getDuration(start: string, end: string): number {
@@ -176,7 +183,7 @@ export class ReportsComponent implements OnInit {
     for (let i = 0; i < this.tasksInfo.length; i++) {
       const dateEnd = new Date(this.tasksInfo[i].dateEnd);
       const dateStr = new Date(this.tasksInfo[i].dateStr);
-      if (this.tasksInfo[i].status === "Not set" && dateStr.getTime() <= nowDate.getTime() || dateEnd.getTime() >= startDate.getTime() && dateEnd.getTime() <= nowDate.getTime()) {
+      if (this.tasksInfo[i].status === "Not set" && ( dateStr.getTime() <= nowDate.getTime() || dateEnd.getTime() >= startDate.getTime() && dateEnd.getTime() <= nowDate.getTime())) {
         this.tasksFiltered.push(this.tasksInfo[i]);
         this.setFlags(i);
       }
@@ -195,7 +202,7 @@ export class ReportsComponent implements OnInit {
     for (let i = 0; i < this.tasksInfo.length; i++) {
       const dateEnd = new Date(this.tasksInfo[i].dateEnd);
       const dateStr = new Date(this.tasksInfo[i].dateStr);
-      if (this.tasksInfo[i].status === "In progress" && dateStr.getTime() >= startDate.getTime() && dateStr.getTime() <= nowDate.getTime() || dateEnd.getTime() >= startDate.getTime() && dateEnd.getTime() <= nowDate.getTime()) {
+      if (this.tasksInfo[i].status === "In progress" && (dateStr.getTime() >= startDate.getTime() && dateStr.getTime() <= nowDate.getTime() || dateEnd.getTime() >= startDate.getTime() && dateEnd.getTime() <= nowDate.getTime())) {
         this.tasksFiltered.push(this.tasksInfo[i]);
         this.setFlags(i);
       }
@@ -269,7 +276,7 @@ export class ReportsComponent implements OnInit {
     this.createComponent(this.tasksFiltered);
   }
 
-  createComponent(usersInfo: UsersInfo[]): void {
+  createComponent(usersInfo: TasksInfo[]): void {
     if (!this.container) {
       return;
     }
@@ -302,15 +309,8 @@ export class ReportsComponent implements OnInit {
     this.statusesFlags.clear();
   }
 
-  allStatusesChanged(isAllStatuses: boolean): void {
-    if (isAllStatuses) {
-      for (let i = 0; i < this.statusesFlags.size; i++) {
-      }
-    }
-  }
-
   flagChanged(flag: string): void {
-    let tasksWithOptions: UsersInfo[] = [];
+    let tasksWithOptions: TasksInfo[] = [];
     if (flag === "isAllTeams") {
       for (const team of this.teamsFiltered) {
         this.teamsFlags.set(team, this.isAllTeams);
@@ -352,8 +352,8 @@ export class ReportsComponent implements OnInit {
     this.flagChanged("");
   }
 
-  filterByTitleDesc(tasks: UsersInfo[]): UsersInfo[] {
-    const tasksFiltered: UsersInfo[] = [];
+  filterByTitleDesc(tasks: TasksInfo[]): TasksInfo[] {
+    const tasksFiltered: TasksInfo[] = [];
     if (tasks) {
       for (const task of tasks) {
         if (task.title.includes(this.titleDesc) || task.description.includes(this.titleDesc)) {
@@ -364,8 +364,8 @@ export class ReportsComponent implements OnInit {
     return tasksFiltered;
   }
 
-  filterByDate(tasks: UsersInfo[]): UsersInfo[] {
-    const tasksFiltered: UsersInfo[] = [];
+  filterByDate(tasks: TasksInfo[]): TasksInfo[] {
+    const tasksFiltered: TasksInfo[] = [];
     const startDate = new Date(this.startDate);
     const endDate = new Date(this.endDate);
     if (tasks) {
@@ -380,8 +380,8 @@ export class ReportsComponent implements OnInit {
     return tasksFiltered;
   }
 
-  filterByDuration(tasks: UsersInfo[]): UsersInfo[] {
-    const tasksFiltered: UsersInfo[] = [];
+  filterByDuration(tasks: TasksInfo[]): TasksInfo[] {
+    const tasksFiltered: TasksInfo[] = [];
     const start = this.startDuration;
     const end = this.endDuration;
     if (tasks) {
@@ -394,9 +394,39 @@ export class ReportsComponent implements OnInit {
     return tasksFiltered;
   }
 
-  filterByTeams(tasks: UsersInfo[]): UsersInfo[] {
-    const teamsMap = this.getTeams();
-    const tasksFiltered: UsersInfo[] = [];
+  getTeamsMap(): string[] {
+    const teamsMap: string[] = [];
+    for (const team of this.teamsFiltered) {
+      if (this.teamsFlags.get(team)) {
+        teamsMap.push(team);
+      }
+    }
+    return teamsMap;
+  }
+
+  getUsersMap(): string[] {
+    const usersMap: string[] = [];
+    for (const user of this.usersFiltered) {
+      if (this.usersFlags.get(user)) {
+        usersMap.push(user);
+      }
+    }
+    return usersMap;
+  }
+
+  getStatusesMap(): string[] {
+    const statusesMap: string[] = [];
+    for (const status of this.statusFiltered) {
+      if (this.statusesFlags.get(status)) {
+        statusesMap.push(status);
+      }
+    }
+    return statusesMap;
+  }
+
+  filterByTeams(tasks: TasksInfo[]): TasksInfo[] {
+    const teamsMap = this.getTeamsMap();
+    const tasksFiltered: TasksInfo[] = [];
     if (tasks && teamsMap) {
       for (const task of tasks) {
         if (teamsMap.includes(task.team)) {
@@ -407,29 +437,9 @@ export class ReportsComponent implements OnInit {
     return tasksFiltered;
   }
 
-  getTeams(): string[] {
-    const teamsMap: string[] = [];
-    for (const team of this.teamsFiltered) {
-      if (this.teamsFlags.get(team)) {
-        teamsMap.push(team);
-      }
-    }
-    return teamsMap;
-  }
-
-  getUsers(): string[] {
-    const usersMap: string[] = [];
-    for (const user of this.usersFiltered) {
-      if (this.usersFlags.get(user)) {
-        usersMap.push(user);
-      }
-    }
-    return usersMap;
-  }
-
-  filterByUsers(tasks: UsersInfo[]): UsersInfo[] {
-    const usersMap = this.getUsers();
-    const tasksFiltered: UsersInfo[] = [];
+  filterByUsers(tasks: TasksInfo[]): TasksInfo[] {
+    const usersMap = this.getUsersMap();
+    const tasksFiltered: TasksInfo[] = [];
     if (tasks && usersMap) {
       for (const task of tasks) {
         if (usersMap.includes(task.assignee)) {
@@ -440,19 +450,9 @@ export class ReportsComponent implements OnInit {
     return tasksFiltered;
   }
 
-  getStatuses(): string[] {
-    const statusesMap: string[] = [];
-    for (const status of this.statusFiltered) {
-      if (this.statusesFlags.get(status)) {
-        statusesMap.push(status);
-      }
-    }
-    return statusesMap;
-  }
-
-  filterByStatuses(tasks: UsersInfo[]): UsersInfo[] {
-    const statusesMap = this.getStatuses();
-    const tasksFiltered: UsersInfo[] = [];
+  filterByStatuses(tasks: TasksInfo[]): TasksInfo[] {
+    const statusesMap = this.getStatusesMap();
+    const tasksFiltered: TasksInfo[] = [];
     if (tasks && statusesMap) {
       for (const task of tasks) {
         if (statusesMap.includes(task.status)) {
@@ -461,5 +461,9 @@ export class ReportsComponent implements OnInit {
       }
     }
     return tasksFiltered;
+  }
+
+  getValueOfStatus(status: string): boolean{
+    return this.statusesFlags.get(status)
   }
 }

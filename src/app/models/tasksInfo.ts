@@ -1,4 +1,4 @@
-export class UsersInfo{
+export class TasksInfo{
   constructor(
     public team: string,
     public assignee: string,
