@@ -1,4 +1,4 @@
-export class TasksInfo{
+export class TasksInfo {
   constructor(
     public team: string,
     public assignee: string,
@@ -7,6 +7,6 @@ export class TasksInfo{
     public description: string,
     public dateStr: string,
     public dateEnd: string,
-    public duration: number
-  ){}
+    public duration: number,
+  ) {}
 }

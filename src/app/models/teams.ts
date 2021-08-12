@@ -1,7 +1,7 @@
-export class Team{
+export class Team {
   constructor(
     public id: number,
     public teamId: number,
-    public title: string
-  ){}
+    public title: string,
+  ) {}
 }

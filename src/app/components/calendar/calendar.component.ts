@@ -127,7 +127,7 @@ export class CalendarComponent implements OnInit {
         },
       },
       resourceAreaHeaderContent: "Team",
-      resourceGroupField: "team"
+      resourceGroupField: "team",
     };
     this.getUsers();
     this.getTasks();
@@ -168,7 +168,7 @@ export class CalendarComponent implements OnInit {
           status: task.status,
           id: String(task.id),
           backgroundColor: this.getColor(task.status),
-          borderColor: this.getColor(task.status)
+          borderColor: this.getColor(task.status),
         });
       }
     });
@@ -294,6 +294,7 @@ export class CalendarComponent implements OnInit {
     this.componentRef.instance.status = status;
     this.componentRef.instance.start = start;
     this.componentRef.instance.end = end;
+    this.componentRef.instance.isDisableToEdit = this.userId !== Number(userId);
 
     this.sub = this.interval.subscribe(() => {
       this.tasksService.getTask(id).subscribe(task => {

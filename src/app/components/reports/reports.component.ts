@@ -7,16 +7,16 @@ import {
   ViewChild,
   ViewContainerRef,
 } from "@angular/core";
-import {DataTableDirective} from "angular-datatables";
-import {Subject} from "rxjs";
-import {Task} from "../../models/tasks";
-import {Team} from "../../models/teams";
-import {User} from "../../models/users";
-import {TasksInfo} from "../../models/tasksInfo";
-import {TasksService} from "../../services/tasks/tasks.service";
-import {TeamsService} from "../../services/teams/teams.service";
-import {UsersService} from "../../services/users/users.service";
-import {TableComponent} from "../table/table.component";
+import { DataTableDirective } from "angular-datatables";
+import { Subject } from "rxjs";
+import { Task } from "../../models/tasks";
+import { TasksInfo } from "../../models/tasksInfo";
+import { Team } from "../../models/teams";
+import { User } from "../../models/users";
+import { TasksService } from "../../services/tasks/tasks.service";
+import { TeamsService } from "../../services/teams/teams.service";
+import { UsersService } from "../../services/users/users.service";
+import { TableComponent } from "../table/table.component";
 
 @Component({
   selector: "app-reports",
@@ -90,7 +90,7 @@ export class ReportsComponent implements OnInit {
         this.tasksFiltered = this.tasksInfo;
       });
     });
-    this.getTeams()
+    this.getTeams();
   }
 
   ngOnDestroy(): void {
@@ -461,9 +461,5 @@ export class ReportsComponent implements OnInit {
       }
     }
     return tasksFiltered;
-  }
-
-  getValueOfStatus(status: string): boolean{
-    return this.statusesFlags.get(status)
   }
 }

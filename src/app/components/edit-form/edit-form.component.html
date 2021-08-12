@@ -8,16 +8,14 @@
       </div>
       <div class="form-edit">
         <div class="date">
-          <input placeholder="Title" class="form-control" formControlName="title">
-          <textarea contenteditable="true" placeholder="Task description" class="form-control description" formControlName="description"></textarea>
-          <!--<button (click)="change.next(info)">Change status to {{formStatus}}</button>-->
+          <input placeholder="Title" class="form-control" formControlName="title" [readOnly]="isDisableToEdit">
+          <textarea contenteditable="true" placeholder="Task description" class="form-control description" formControlName="description" [readOnly]="isDisableToEdit"></textarea>
         </div>
-        <div class="buttons">
+        <div class="buttons" *ngIf="!isDisableToEdit">
           <button (click)="restartStatus()">Change status to {{formStatus}}</button>
           <button class="buttons-item" (click)="delete.next('true')">Delete</button>
         </div>
       </div>
-
     </form>
   </div>
 </body>

@@ -62,13 +62,14 @@
           </ng-template>
         </div>
       </div>
-
     </div>
+
     <div class="options-item">
       <p>Filter by Title/Description</p>
       <span>Contains text</span>
       <span><input type="text" [(ngModel)]="titleDesc" (keyup)="catchTitleDescInput()"></span>
     </div>
+
     <div class="options-item">
       <p>Filter by Dates</p>
       <div class="options-input">
@@ -78,6 +79,7 @@
         <span class="options-input-item"><input type="text" placeholder="yyyy-MM-dd" onfocus="(this.type='date')" onblur="(this.type='text')" [(ngModel)]="endDate" (change)="flagChanged('')"></span>
       </div>
     </div>
+
     <div class="options-item">
       <p>Filter by Duration</p>
       <div class="options-input">

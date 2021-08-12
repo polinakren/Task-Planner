@@ -27,6 +27,7 @@ export class EditFormComponent implements OnInit {
   @Input() title: string = "";
   @Input() description: string = "";
   @Input() status: string = "";
+  @Input() isDisableToEdit: boolean | undefined;
 
   @Output() output = new EventEmitter();
   @Output() delete = new EventEmitter();
