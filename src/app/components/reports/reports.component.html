@@ -1,19 +1,19 @@
 <header class="navigation">
   <div class="navigation-item">
     <p>Show tasks</p>
-    <button (click)="showTasksInBacklog()" class="settings">In backlog</button>
-    <button (click)="showTasksOverdue()" class="settings">Overdue</button>
-    <button (click)="showTasks('currentWeek')" class="settings">Current week</button>
-    <button (click)="showTasks('previousWeek')" class="settings">Previous week</button>
-    <button (click)="showTasks('lastTwoWeeks')" class="settings">Last two weeks</button>
-    <button (click)="showTasksCurrentMonth()" class="settings">Current month</button>
+    <button mat-raised-button (click)="showTasksInBacklog()" class="settings">In backlog</button>
+    <button mat-raised-button (click)="showTasksOverdue()" class="settings">Overdue</button>
+    <button mat-raised-button (click)="showTasks('currentWeek')" class="settings">Current week</button>
+    <button mat-raised-button (click)="showTasks('previousWeek')" class="settings">Previous week</button>
+    <button mat-raised-button (click)="showTasks('lastTwoWeeks')" class="settings">Last two weeks</button>
+    <button mat-raised-button (click)="showTasksCurrentMonth()" class="settings">Current month</button>
   </div>
   <div class="navigation-item">
     <p class="navigation-date">Tasks from </p>
     <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="fromDate">
     <p class="navigation-date">To </p>
     <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="yyyy-MM-dd" [(ngModel)]="toDate">
-    <button (click)="showInputDate()" class="settings">Show</button>
+    <button mat-raised-button (click)="showInputDate()" class="settings">Show</button>
   </div>
 </header>
 
@@ -24,11 +24,11 @@
       <div class="scroll">
         <div *ngFor = "let team of teamsFiltered" class="scroll-item">
           <div *ngIf="isAllTeams; else notAllTeams">
-            <span ><input type="checkbox" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+            <span ><input type="checkbox" (change)="flagChanged(team)" [checked]=team>{{ team }}</span>
           </div>
 
           <ng-template #notAllTeams>
-            <span><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged(team)" [checked]=team>{{team}}</span>
+            <span><input type="checkbox" [(ngModel)]="isAllTeams" (change)="flagChanged(team)" [checked]=team>{{ team }}</span>
           </ng-template>
         </div>
       </div>
@@ -39,11 +39,11 @@
       <div class="scroll">
         <div *ngFor="let user of usersFiltered" class="scroll-item">
           <div *ngIf="isAllUsers; else notAllUsers">
-            <span><input type="checkbox" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
+            <span><input type="checkbox" (change)="flagChanged(user)" [checked]=user>{{  user}}</span>
           </div>
 
           <ng-template #notAllUsers>
-            <span><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged(user)" [checked]=user>{{user}}</span>
+            <span><input type="checkbox" [(ngModel)]="isAllUsers" (change)="flagChanged(user)" [checked]=user>{{ user }}</span>
           </ng-template>
         </div>
       </div>
@@ -54,11 +54,11 @@
       <div class="scroll">
         <div *ngFor = "let status of statusFiltered" class="scroll-item">
           <div *ngIf="isAllStatuses; else notAllStatuses">
-              <span><input type="checkbox" (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+              <span><input type="checkbox" (change)="flagChanged(status)" [checked]=status>{{ status }}</span>
           </div>
 
           <ng-template #notAllStatuses>
-              <span><input type="checkbox" [(ngModel)]= "isAllStatuses"  (change)="flagChanged(status)" [checked]=status>{{status}}</span>
+              <span><input type="checkbox" [(ngModel)]= "isAllStatuses"  (change)="flagChanged(status)" [checked]=status>{{ status }}</span>
           </ng-template>
         </div>
       </div>

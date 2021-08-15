@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { interval } from "rxjs";
+import {interval, Subscription} from "rxjs";
 
 @Component({
   selector: "app-edit-form",
   templateUrl: "./edit-form.component.html",
   styleUrls: ["./edit-form.component.css"]
 })
-export class EditFormComponent implements OnInit {
+export class EditFormComponent implements OnInit, OnDestroy {
   formStatus: string = "";
   editForm: FormGroup = new FormGroup ({ firstName: new FormControl(), lastName: new FormControl()});
   interval = interval(3000);
+  private taskSub: Subscription | undefined;
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -45,11 +46,16 @@ export class EditFormComponent implements OnInit {
 
     this.getStatus();
 
-    this.interval.subscribe((value => {
+    this.taskSub = this.interval
+      .subscribe((() => {
       this.info.title = this.editForm.get("title")?.value;
       this.info.description = this.editForm.get("description")?.value;
       this.change.next(this.info);
     }));
+  }
+
+  ngOnDestroy(): void {
+    this.taskSub?.unsubscribe()
   }
 
   getStatus(): void {

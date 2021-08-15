@@ -1,50 +1,45 @@
-button{
+button {
   background: #2c3e50;
   color: #ffffff;
-  border: 1px solid #2c3e50;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 10px;
 }
 
-button:hover{
+button:hover {
   background: #8683aa;
-  border: 1px solid #8683aa;
 }
 
-header, body{
+header, body {
   margin: 0;
 }
 
-body{
+body {
   margin-top: 1em;
 }
 
-.navigation, .options{
+.navigation, .options {
   display: flex;
   justify-content: space-between;
 }
 
-.navigation-item{
+.navigation-item {
   height: 40px;
   display: flex;
 }
 
-.navigation-date{
+.navigation-date {
   margin-right: 1em;
   margin-left: 1em;
 }
 
-.settings{
+.settings {
   margin-left: 1em;
 }
 
-input{
+input {
   border: 1px solid #2c3e50;
   border-radius: 6px;
 }
 
-.options{
+.options {
   background-color: white;
   border: 1px solid #2c3e50;
   border-radius: 6px;
@@ -53,19 +48,19 @@ input{
   display: flex;
 }
 
-.options p{
+.options p {
   font-weight: bold;
 }
 
-.options-item{
+.options-item {
   width: 17%;
 }
 
-input[type = checkbox]{
+input[type = checkbox] {
   cursor: pointer;
 }
 
-.scroll{
+.scroll {
   display: flex;
   height: 110px;
   flex-wrap: wrap;
@@ -73,12 +68,12 @@ input[type = checkbox]{
   align-content: flex-start;
 }
 
-.scroll-item, .options-input-item{
+.scroll-item, .options-input-item {
   width: 100%;
   padding-bottom: 4px;
 }
 
-.options-input{
+.options-input {
   display: flex;
   height: 110px;
   flex-wrap: wrap;

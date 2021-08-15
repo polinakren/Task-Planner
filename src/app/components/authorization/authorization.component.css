@@ -1,13 +1,13 @@
-button{
+button {
   background: #2c3e50;
   color: #ffffff;
-  border: 1px solid #2c3e50;
-  border-radius: 4px;
-  padding: 10px;
-  cursor: pointer;
 }
 
-input{
+button:hover {
+  background: #8683aa;
+}
+
+input {
   border: 1px solid #2c3e50;
   border-radius: 6px;
   padding: 10px;
@@ -16,7 +16,7 @@ input{
   outline: none;
 }
 
-form{
+form {
   width: 250px;
   height: 250px;
   position: absolute;
@@ -26,9 +26,3 @@ form{
   left: 0;
   margin: auto;
 }
-
-button:hover{
-  background: #8683aa;
-  border: 1px solid #8683aa;
-}
-

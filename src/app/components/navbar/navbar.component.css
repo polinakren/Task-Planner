@@ -1,9 +1,9 @@
-.navigation{
+.navigation {
   display: flex;
   justify-content: space-between;
 }
 
-.navigation-item{
+.navigation-item {
   display: flex;
 }
 
@@ -14,25 +14,20 @@ hr {
   color: #2c3e50;
 }
 
-button{
+button {
   background: #2c3e50;
   color: #ffffff;
-  border: 1px solid #2c3e50;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 10px;
 }
 
-button:hover{
+button:hover {
   background: #8683aa;
-  border: 1px solid #8683aa;
 }
 
-.settings, .reports{
+.settings, .reports {
   margin-left: 1em;
 }
 
-.user{
+.user {
   margin-right: 1em;
   cursor: auto;
 }

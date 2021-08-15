@@ -1,10 +1,10 @@
 <body>
   <div class = "edit-form">
     <form [formGroup]="editForm">
-      <p>{{name}}</p>
+      <p>{{ name }}</p>
       <div class="date">
-        <p>Start {{start}}</p>
-        <p class="date-item">End {{end}}</p>
+        <p>Start {{ start }}</p>
+        <p class="date-item">End {{ end }}</p>
       </div>
       <div class="form-edit">
         <div class="date">
@@ -12,8 +12,8 @@
           <textarea contenteditable="true" placeholder="Task description" class="form-control description" formControlName="description" [readOnly]="isDisableToEdit"></textarea>
         </div>
         <div class="buttons" *ngIf="!isDisableToEdit">
-          <button (click)="restartStatus()">Change status to {{formStatus}}</button>
-          <button class="buttons-item" (click)="delete.next('true')">Delete</button>
+          <button mat-raised-button (click)="restartStatus()">Change status to {{ formStatus }}</button>
+          <button mat-raised-button class="buttons-item" (click)="delete.next('true')">Delete</button>
         </div>
       </div>
     </form>

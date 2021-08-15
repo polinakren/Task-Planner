@@ -19,6 +19,7 @@ import { PageCalendarComponent } from './components/page-calendar/page-calendar.
 import { PageReportsComponent } from './components/page-reports/page-reports.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { TableComponent } from './components/table/table.component';
+import { MatButtonModule } from "@angular/material/button";
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -42,6 +43,7 @@ FullCalendarModule.registerPlugins([
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatButtonModule,
     CommonModule,
     FullCalendarModule,
     DataTablesModule,

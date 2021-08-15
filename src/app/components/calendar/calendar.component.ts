@@ -3,7 +3,7 @@ import {
   ComponentFactory,
   ComponentFactoryResolver,
   ComponentRef,
-  Input,
+  Input, OnDestroy,
   OnInit,
   ViewChild,
   ViewContainerRef,
@@ -35,7 +35,7 @@ import { EditFormComponent } from "../edit-form/edit-form.component";
   templateUrl: "./calendar.component.html",
   styleUrls: ["./calendar.component.css"]
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   constructor(
     private tasksService: TasksService,
     private usersService: UsersService,
@@ -52,6 +52,9 @@ export class CalendarComponent implements OnInit {
   tasks: Task[] = [];
   users: User[] = [];
   teams: Team[] = [];
+  private usersSub: Subscription | undefined;
+  private tasksSub: Subscription | undefined;
+  private teamsSub: Subscription | undefined;
   calendarApi: CalendarApi | undefined;
   interval = interval(2000);
   sub: Subscription | undefined;
@@ -60,6 +63,7 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserId(String(localStorage.getItem("userName")));
+
     this.calendarOptions = {
       aspectRatio: 3,
       businessHours: true,
@@ -135,7 +139,8 @@ export class CalendarComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.usersService.getUsers().subscribe(users => {
+    this.usersSub = this.usersService.getUsers()
+      .subscribe((users) => {
       this.users = users;
       this.calendarApi = this.getCalendarApi();
       for (const user of this.users) {
@@ -154,7 +159,8 @@ export class CalendarComponent implements OnInit {
   }
 
   getTasks(): void {
-    this.tasksService.getTasks().subscribe(tasks => {
+    this.tasksSub = this.tasksService.getTasks()
+      .subscribe((tasks) => {
       this.tasks = tasks;
       this.calendarApi = this.getCalendarApi();
       for (const task of this.tasks) {
@@ -175,7 +181,8 @@ export class CalendarComponent implements OnInit {
   }
 
   getTeams(): void {
-    this.teamsService.getTeams().subscribe(teams => {
+    this.teamsSub = this.teamsService.getTeams()
+      .subscribe((teams) => {
       this.teams = teams;
     });
   }
@@ -195,7 +202,7 @@ export class CalendarComponent implements OnInit {
   }
 
   getUserId(title: string): void {
-    this.usersService.getUsers().subscribe(users => {
+     this.usersService.getUsers().subscribe(users => {
       for (const user of users) {
         if (title === user.login) {
           this.userId = user.id;
@@ -205,13 +212,14 @@ export class CalendarComponent implements OnInit {
   }
 
   eventDrop(info: EventDropArg): void {
-    if (this.userId != info.event._def.resourceIds) {
-      info.revert();
-    } else {
+    if(info.oldEvent._def.resourceIds === info.event._def.resourceIds && this.userId === Number(info.event._def.resourceIds)) {
       this.tasksService.editTask(new Task(this.getTypeOfUser(Number(info.event._def.resourceIds)), Number(info.event._def.resourceIds),
         info.event.startStr, info.event.endStr, info.event.title,
         info.event._def.extendedProps.description, info.event._def.extendedProps.status,
         Number(info.event.id)), Number(info.event.id)).subscribe();
+    }
+    else {
+      info.revert();
     }
   }
 
@@ -229,7 +237,8 @@ export class CalendarComponent implements OnInit {
     this.calendarApi = selectInfo.view.calendar;
     this.calendarApi.unselect();
     if (String(this.userId) === selectInfo.resource?.id) {
-      this.tasksService.addTask(this.getTypeOfUser(Number(selectInfo.resource?.id)), Number(selectInfo.resource?.id), selectInfo.startStr, selectInfo.endStr, "", "", "Not set").subscribe(task => {
+      this.tasksService.addTask(this.getTypeOfUser(Number(selectInfo.resource?.id)), Number(selectInfo.resource?.id), selectInfo.startStr, selectInfo.endStr, "", "", "Not set")
+        .subscribe((task) => {
         this.calendarApi?.addEvent({
           type: task.assigneeType,
           resourceId: String(task.assigneeId),
@@ -296,8 +305,10 @@ export class CalendarComponent implements OnInit {
     this.componentRef.instance.end = end;
     this.componentRef.instance.isDisableToEdit = this.userId !== Number(userId);
 
-    this.sub = this.interval.subscribe(() => {
-      this.tasksService.getTask(id).subscribe(task => {
+    this.sub = this.interval
+      .subscribe(() => {
+      this.tasksService.getTask(id)
+        .subscribe((task) => {
         if (!this.componentRef) {
           return;
         }
@@ -306,7 +317,8 @@ export class CalendarComponent implements OnInit {
       });
     });
 
-    this.componentRef.instance.delete.subscribe((event: any) => {
+    this.componentRef.instance.delete
+      .subscribe((event: any) => {
       this.delete(id);
       if (!this.componentRef) {
         return;
@@ -314,7 +326,8 @@ export class CalendarComponent implements OnInit {
       this.componentRef.destroy();
     });
 
-    this.componentRef.instance.change.subscribe((info: any) => {
+    this.componentRef.instance.change
+      .subscribe((info: any) => {
       if (!this.componentRef) {
         return;
       }
@@ -324,7 +337,8 @@ export class CalendarComponent implements OnInit {
       eventApi?.setExtendedProp("status", String(info.status));
       eventApi?.setProp("backgroundColor", this.getColor(info.status));
       eventApi?.setProp("borderColor", this.getColor(info.status));
-      this.tasksService.editTask(new Task(this.getTypeOfUser(userId), userId, this.componentRef.instance.start, this.componentRef.instance.end, info.title, info.description, info.status, id), id).subscribe();
+      this.tasksService.editTask(new Task(this.getTypeOfUser(userId), userId, this.componentRef.instance.start, this.componentRef.instance.end, info.title, info.description, info.status, id), id)
+        .subscribe();
     });
   }
 
@@ -339,5 +353,11 @@ export class CalendarComponent implements OnInit {
       return "#7baa98";
     }
     return "#ababba";
+  }
+
+  ngOnDestroy(): void {
+    this.usersSub?.unsubscribe();
+    this.tasksSub?.unsubscribe();
+    this.teamsSub?.unsubscribe();
   }
 }

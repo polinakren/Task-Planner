@@ -8,7 +8,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { DataTableDirective } from "angular-datatables";
-import { Subject } from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import { Task } from "../../models/tasks";
 import { TasksInfo } from "../../models/tasksInfo";
 import { Team } from "../../models/teams";
@@ -52,6 +52,10 @@ export class ReportsComponent implements OnInit {
   usersFlags = new Map();
   statusesFlags = new Map();
 
+  private usersSub: Subscription | undefined;
+  private tasksSub: Subscription | undefined;
+  private teamsSub: Subscription | undefined;
+
   componentRef!: ComponentRef<any> | undefined;
   @ViewChild("tableContainer", {read: ViewContainerRef}) container: {
     clear: () => void;
@@ -69,9 +73,10 @@ export class ReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tasksService.getTasks().subscribe(tasks => {
+    this.tasksSub = this.tasksService.getTasks()
+      .subscribe((tasks) => {
       this.tasks = tasks;
-      this.usersService.getUsers().subscribe(users => {
+      this.usersSub = this.usersService.getUsers().subscribe((users) => {
         this.users = users;
         for (let i = 0; i < this.users.length; i++)
           this.usersFlags.set(this.users[i].title, true);
@@ -95,10 +100,14 @@ export class ReportsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.usersSub?.unsubscribe();
+    this.tasksSub?.unsubscribe();
+    this.teamsSub?.unsubscribe();
   }
 
   getTeams(): void {
-    this.teamsService.getTeams().subscribe(teams => {
+    this.teamsSub = this.teamsService.getTeams()
+      .subscribe((teams) => {
       this.teams = teams;
     });
   }

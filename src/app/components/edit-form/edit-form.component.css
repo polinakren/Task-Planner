@@ -1,4 +1,4 @@
-.edit-form{
+.edit-form {
   width: 22.2%;
   position: absolute;
   right: 0;
@@ -9,40 +9,36 @@
   padding: 13px ;
 }
 
-button{
+button {
   background: #2c3e50;
   color: #ffffff;
-  border: 1px solid #2c3e50;
-  border-radius: 4px;
-  padding: 10px;
-  cursor: pointer;
 }
 
-.date{
+.date {
   display: flex;
   flex-wrap: wrap;
 }
 
-.date-item{
+.date-item {
   margin-left: 4em;
 }
 
-.form-control{
+.form-control {
   width: 100%;
   padding: 6px;
   margin-bottom: 0.5em;
 }
 
-.buttons{
+.buttons {
   display: flex;
   justify-content: space-between;
 }
 
-.description{
+.description {
   height: 160px;
 }
 
-input, textarea{
+input, textarea {
   border: 1px solid #2c3e50;
   border-radius: 6px;
 }

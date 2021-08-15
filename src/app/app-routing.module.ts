@@ -5,10 +5,10 @@ import { PageCalendarComponent } from "./components/page-calendar/page-calendar.
 import { PageReportsComponent } from "./components/page-reports/page-reports.component";
 
 const appRoutes: Routes =[
-  { path: "auth", component: AuthorizationComponent},
-  { path: "", redirectTo: "/auth", pathMatch: "full"},
-  { path: "calendar", component: PageCalendarComponent},
-  { path: "reports", component: PageReportsComponent}
+  { path: "auth", component: AuthorizationComponent },
+  { path: "", redirectTo: "/auth", pathMatch: "full" },
+  { path: "calendar", component: PageCalendarComponent },
+  { path: "reports", component: PageReportsComponent }
 ];
 
 @NgModule({

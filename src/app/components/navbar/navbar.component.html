@@ -1,12 +1,12 @@
 <div class="navigation">
   <div class="navigation-item">
-    <button (click)="calendarPage()">Tasks</button>
-    <button class="settings">Settings</button>
-    <button class="reports" (click)="reportPage()">Reports</button>
+    <button mat-raised-button (click)="calendarPage()">Tasks</button>
+    <button mat-raised-button class="settings">Settings</button>
+    <button mat-raised-button class="reports" (click)="reportPage()">Reports</button>
   </div>
   <div class="navigation-item">
-    <button class="user">{{user}}</button>
-    <button (click)="signOut()">Sign out</button>
+    <button mat-raised-button class="user">{{ user }}</button>
+    <button mat-raised-button (click)="signOut()">Sign out</button>
   </div>
 </div>
 <hr>
